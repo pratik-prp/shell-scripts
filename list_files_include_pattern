@@ -1,0 +1,18 @@
+#!/bin/bash
+
+find / -type f \( -name "*.R" -o -name "*.r" \) -print 2>/dev/null > data.txt
+
+#sed 's/^/"/;s/$/"/' data.txt  > data2.txt
+
+output_file="output.txt"  # Specify the output file name
+
+cat data.txt | while read line
+do
+  echo $line
+  cat "$line" | sed 's/ /\\ /g' | grep 'slave.db-endpoint'
+
+  if [ $? -eq 0 ]
+  then
+    echo $line >> $output_file  # Append the line to the output file
+  fi
+done
